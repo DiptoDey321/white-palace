@@ -1,18 +1,44 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './Header.css';
 
 function Header() {
 
-    const [isMenu , setMenu] = useState(true)
     
-    function showHome(){
-        setMenu(true)
-    };
-    function otherOptions(){
-        setMenu(false)
+    const defaultImg = 'https://i.ibb.co/9wy4MhC/banner.png'
+    const [isHome, setHome] = useState(true)
+    const [pageMsg, setPageMsg] = useState("Welcome to White Palace")
+    const [img , setImg] = useState(defaultImg)
+    const bimg = {
+        background: `url(${defaultImg})`,
     }
+   
+    const showHome = event => { 
+
+        if(event.currentTarget.innerText.toLowerCase() !== "home"){
+            setHome(false)
+            if (event.currentTarget.innerText.toLowerCase() === "rooms") {
+                setPageMsg("ROOms")
+            }else if(event.currentTarget.innerText.toLowerCase() === "services"){
+                setPageMsg("SERVICES")
+            }else if(event.currentTarget.innerText.toLowerCase() === "gallery"){
+                setPageMsg("gallery")
+            }else if(event.currentTarget.innerText.toLowerCase() === "news"){
+                setPageMsg("news")
+            }else if(event.currentTarget.innerText.toLowerCase() === "about"){
+                setPageMsg("about")
+            }else if(event.currentTarget.innerText.toLowerCase() === "contact"){
+                setPageMsg("contact")
+            }
+        }else{
+            setHome(true)
+            setPageMsg("Welcome to White Palace")
+        }
+    };
+    
+
   return (
-    <div className='bg-[#5B1054]/80'>
+    <div style={bimg} className=''>
         <div className="mx-[10%]">
             {/* top header part  */}
             <div className="py-[64px] flex justify-between">
@@ -99,26 +125,52 @@ function Header() {
             {/* navbar part  */}
             <nav>
                 <ul className='flex items-center gap-x-[5%] justify-center text-sm text-white font-medium uppercase'>
-                    <li><button onClick={()=>showHome()} className='uppercase'><Link to="/">Home</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/rooms'>Rooms</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/service'>services</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/gallery'>gallery</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/news'>news</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/about'>about</Link></button></li>
-                    <li><button onClick={()=>otherOptions()} className='uppercase'><Link to='/contact'>contact</Link></button></li>
+                    <li><Link to="/"><button onClick={showHome} className='uppercase'>Home</button></Link></li>
+                    <li><Link to='/rooms'><button onClick={showHome} className='uppercase'>Rooms</button></Link></li>
+                    <li><Link to='/service'><button onClick={showHome} className='uppercase'>services</button></Link></li>
+                    <li><Link to='/gallery'><button onClick={showHome} className='uppercase'>gallery</button></Link></li>
+                    <li><Link to='/news'><button onClick={showHome} className='uppercase'>news</button></Link></li>
+                    <li><Link to='/about'><button onClick={showHome} className='uppercase'>about</button></Link></li>
+                    <li><Link to='/contact'><button onClick={showHome} className='uppercase'>contact</button></Link></li>
                 </ul>
             </nav>
 
             {/* page wlcm message  */}
-            <div className="">
-                Wlcm msges
+            <div className="py-[130px]">
+               <h3 className='page-msg text-center text-[48px] text-[#666666]/60 font-bold uppercase tracking-wider'>{pageMsg}</h3>
             </div>
 
             {/* page-info  */}
-            { isMenu &&
-                <div className="">
-                    <p>{isMenu}</p>
-                    <h3>Home Extra func is showing </h3>
+            { isHome && 
+                <div className="pb-[60px] flex gap-x-[5%] justify-center items-center">
+                    <div className="flex flex-col items-center gap-y-5">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M45 3.75001C46.6531 3.75169 48.2855 4.11766 49.781 4.82188C51.2766 5.52609 52.5986 6.55125 53.653 7.82441C54.7074 9.09758 55.4682 10.5875 55.8814 12.1881C56.2946 13.7887 56.35 15.4607 56.0436 17.0851C55.7372 18.7095 55.0766 20.2465 54.1088 21.5866C53.1409 22.9268 51.8896 24.0371 50.4439 24.8388C48.9982 25.6404 47.3936 26.1135 45.7443 26.2246C44.0949 26.3356 42.4414 26.0818 40.9012 25.4813L28.125 42.5025V52.5H33.75C34.2473 52.5 34.7242 52.6975 35.0758 53.0492C35.4275 53.4008 35.625 53.8777 35.625 54.375C35.625 54.8723 35.4275 55.3492 35.0758 55.7008C34.7242 56.0525 34.2473 56.25 33.75 56.25H18.75C18.2527 56.25 17.7758 56.0525 17.4242 55.7008C17.0725 55.3492 16.875 54.8723 16.875 54.375C16.875 53.8777 17.0725 53.4008 17.4242 53.0492C17.7758 52.6975 18.2527 52.5 18.75 52.5H24.375V42.5025L4.5 16.0275C4.01317 15.3784 3.75 14.5889 3.75 13.7775V13.1513C3.75 12.654 3.94754 12.1771 4.29917 11.8254C4.65081 11.4738 5.12772 11.2763 5.625 11.2763H9.8325L5.9925 6.36376C5.68617 5.9719 5.54806 5.4744 5.60854 4.98071C5.66902 4.48702 5.92314 4.03758 6.315 3.73126C6.70686 3.42493 7.20435 3.28682 7.69804 3.3473C8.19173 3.40778 8.64117 3.6619 8.9475 4.05376L14.5875 11.2763H34.3762C35.1488 9.07551 36.5861 7.16917 38.4893 5.82087C40.3925 4.47256 42.6676 3.74892 45 3.75001ZM38.49 11.2763H46.875C47.3723 11.2763 47.8492 11.4738 48.2008 11.8254C48.5525 12.1771 48.75 12.654 48.75 13.1513V13.7738C48.75 14.5851 48.4868 15.3746 48 16.0238L43.2862 22.305C44.6407 22.6223 46.0567 22.5567 47.3759 22.1155C48.6952 21.6743 49.8657 20.8748 50.7568 19.8065C51.6478 18.7382 52.2241 17.4432 52.4213 16.0661C52.6186 14.6891 52.4289 13.2843 51.8736 12.0089C51.3183 10.7334 50.4192 9.63754 49.2769 8.84373C48.1345 8.04992 46.7939 7.58946 45.4048 7.51384C44.0158 7.43821 42.6331 7.75039 41.4113 8.41549C40.1895 9.08058 39.1767 10.0724 38.4862 11.28V11.2763H38.49ZM17.52 15.0263L25.1062 24.7388C25.3952 25.1319 25.5196 25.6222 25.4529 26.1055C25.3862 26.5889 25.1337 27.0272 24.7491 27.3274C24.3645 27.6276 23.8779 27.766 23.3929 27.7133C22.9078 27.6606 22.4624 27.4208 22.1512 27.045L12.7612 15.0263H8.4375L26.25 38.7525L44.0625 15.0263H17.52Z" fill="white" fill-opacity="0.8"/>
+                        </svg>
+                        <p className='text-base text-white font-normal '>Drinks</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-y-5">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M37.1888 44.6138C38.6447 43.1803 37.8591 39.8878 35.4806 36.0844C36.345 35.9494 37.1531 35.7431 37.7644 35.4272C39.9638 34.2919 41.4488 32.2228 42.5728 30.0825C43.7813 27.7866 44.5922 25.2628 46.1691 23.1722C46.4353 22.8187 46.7016 22.5019 46.9669 22.2038C50.3691 22.6116 53.085 23.3428 53.085 23.3428L54.1228 20.7056C52.8129 20.2355 51.4698 19.8635 50.1047 19.5928C50.9409 19.1175 51.4866 18.9694 51.4866 18.9694L50.5031 16.3106C48.9263 16.9772 47.6466 17.9606 46.575 19.1381C42.57 18.9141 38.5369 19.7119 35.355 22.1794C32.9625 24.0356 31.3463 26.6091 29.8256 29.1834C28.4783 27.8613 27.0435 26.6313 25.5309 25.5019C25.8178 25.0303 26.1253 24.6066 26.4563 24.2794C28.4559 22.3106 31.0941 21.0516 32.8247 18.7987C36.4622 14.0681 33.8016 6.6525 30.8091 2.8125C30.2728 3.32906 29.3859 4.08187 28.7184 4.67625C31.8994 7.93406 34.1241 13.6378 31.6313 17.8997C30.2381 20.2819 27.6638 21.7762 25.8638 23.8228C25.5525 24.1781 25.2741 24.6281 25.0219 25.125C20.3147 21.7491 15.9947 20.3906 14.2828 22.0763C14.1128 22.2501 13.9728 22.451 13.8684 22.6706L13.8619 22.6641L13.8159 22.7981C13.7522 22.9434 13.6941 23.0944 13.6547 23.2594L1.875 57.1875L36.2456 45.1706L36.2363 45.1613C36.6056 45.0422 36.9309 44.8669 37.1888 44.6138ZM8.71219 52.8112L5.84344 51.4744L7.77938 45.8963L16.6584 50.0325L8.71219 52.8112ZM24.6038 47.2547L9.71719 40.3181L11.6531 34.7409L22.7775 40.3247C16.1372 36.0028 13.5891 29.1619 13.5891 29.1619L14.2509 27.2559C15.4275 30.2325 18.0159 33.9394 21.5728 37.4381C25.1597 40.9688 28.9613 43.5262 31.9997 44.6691L24.6038 47.2547ZM30.3216 29.6859C31.8759 27.4575 33.4781 25.2084 35.7056 23.6081C37.8263 22.0837 41.2688 21.8053 44.5322 21.9881C43.4297 23.9137 42.615 26.0503 41.8838 28.1025C40.9997 30.5869 39.8147 33.1631 37.5553 34.6866C36.9459 35.0972 36.0919 35.3972 35.1797 35.6194C33.9263 33.6984 32.2819 31.6678 30.3216 29.6859Z" fill="white" fill-opacity="0.8"/>
+                        <path d="M21.5934 20.625C22.5328 20.625 19.7166 17.8125 20.1872 15.3459C21.9909 15.2072 26.1141 16.02 23.7141 12.7237C26.4291 13.2019 27.8353 11.175 25.2722 9.25406C26.1253 9.31406 27.4509 7.70531 26.4994 7.50187C23.4506 6.85594 22.2572 8.505 24.1922 10.8834C22.1578 10.5047 20.4994 11.4506 22.0275 13.575C16.1531 12.8428 19.4953 20.625 21.5934 20.625ZM41.7609 18.1256C42.6412 17.7281 41.1478 15.1022 40.6622 14.4309C44.3775 14.0334 44.2369 12.9262 41.9072 10.5544C48.2409 10.7672 42.1031 7.16719 42.9637 5.74219C43.709 4.50656 45.9956 5.80219 45.7837 5.11406C45.0694 2.8125 38.2931 4.36875 42.5812 8.66625C38.8387 8.73937 38.4797 9.96281 41.2687 12.4987C36.4106 12.5522 40.3744 18.75 41.7609 18.1256ZM57.8409 27.3984C56.3578 27.8137 56.1291 27.6581 56.3269 29.1347C52.9012 27.5578 49.2769 25.365 51.4762 31.1747C47.5856 28.8581 47.7797 30.8869 47.0522 34.2253C46.1053 33.4875 44.76 31.5431 44.76 31.5431L43.335 32.7534C43.335 32.7534 45.9459 36.4359 47.235 36.2269C48.3684 36.0441 48.9853 33.9019 49.0481 32.0137C52.6575 33.5372 54.3853 33.7406 52.7344 29.2856C55.62 30.9066 59.1581 32.3363 57.8409 27.3984ZM5.67093 10.7222L8.32218 13.3744L5.67093 16.0256L3.01874 13.3744L5.67093 10.7222ZM12.0225 21.7481L9.36936 24.3994L6.71718 21.7462L9.3703 19.0941L12.0225 21.7481ZM16.1437 6.5625L18.795 9.21375L16.1428 11.8669L13.4915 9.21375L16.1437 6.5625ZM45.0103 43.5788L42.3572 40.9266L45.0084 38.2734L47.6615 40.9256L45.0103 43.5788ZM39.0984 52.6744L36.4472 50.0231L39.0984 47.3709L41.7506 50.0231L39.0984 52.6744ZM50.7309 54.7687L48.0778 52.1166L50.7281 49.4634L53.3812 52.1156L50.7309 54.7687ZM53.3822 42.69L50.7309 40.0378L53.3822 37.3866L56.0334 40.0378L53.3822 42.69ZM48.9562 9.375L51.6075 12.0262L48.9553 14.6784L46.304 12.0262L48.9562 9.375Z" fill="white" fill-opacity="0.8"/>
+                        </svg>
+                        <p className='text-base text-white font-normal '>events</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-y-5">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M48.75 10H11.25C10.9185 10 10.6005 10.1317 10.3661 10.3661C10.1317 10.6005 10 10.9185 10 11.25V48.75C10 49.0815 10.1317 49.3995 10.3661 49.6339C10.6005 49.8683 10.9185 50 11.25 50H48.75C49.0815 50 49.3995 49.8683 49.6339 49.6339C49.8683 49.3995 50 49.0815 50 48.75V11.25C50 10.9185 49.8683 10.6005 49.6339 10.3661C49.3995 10.1317 49.0815 10 48.75 10ZM11.25 7.5C10.2554 7.5 9.30161 7.89509 8.59835 8.59835C7.89509 9.30161 7.5 10.2554 7.5 11.25V48.75C7.5 49.7446 7.89509 50.6984 8.59835 51.4016C9.30161 52.1049 10.2554 52.5 11.25 52.5H48.75C49.7446 52.5 50.6984 52.1049 51.4016 51.4016C52.1049 50.6984 52.5 49.7446 52.5 48.75V11.25C52.5 10.2554 52.1049 9.30161 51.4016 8.59835C50.6984 7.89509 49.7446 7.5 48.75 7.5H11.25Z" fill="white" fill-opacity="0.8"/>
+                        <path d="M36.25 20H40V40H36.25V20Z" fill="white" fill-opacity="0.8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M38.75 21.25H37.5V38.75H38.75V21.25ZM36.25 20V40H40V20H36.25Z" fill="white" fill-opacity="0.8"/>
+                        <path d="M42.5 23.75H46.25V36.25H42.5V23.75Z" fill="white" fill-opacity="0.8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M45 25H43.75V35H45V25ZM42.5 23.75V36.25H46.25V23.75H42.5Z" fill="white" fill-opacity="0.8"/>
+                        <path d="M23.75 40H20V20H23.75V40Z" fill="white" fill-opacity="0.8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M21.25 38.75H22.5V21.25H21.25V38.75ZM23.75 40V20H20V40H23.75Z" fill="white" fill-opacity="0.8"/>
+                        <path d="M17.5 36.25H13.75V23.75H17.5V36.25Z" fill="white" fill-opacity="0.8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15 35H16.25V25H15V35ZM17.5 36.25V23.75H13.75V36.25H17.5ZM47.5 31.25H42.5V28.75H47.5V31.25Z" fill="white" fill-opacity="0.8"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.875 31.25H12.5V28.75H16.875V31.25ZM33.75 31.25H26.25V28.75H33.75V31.25Z" fill="white" fill-opacity="0.8"/>
+                        </svg>
+                        <p className='text-base text-white font-normal '>gym</p>
+                    </div>
                 </div>
             }
 
